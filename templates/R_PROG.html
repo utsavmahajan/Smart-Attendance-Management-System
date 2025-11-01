@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R Programming Attendance</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button.stop {
+            background-color: #e74c3c;
+        }
+
+        button.stop:hover {
+            background-color: #c0392b;
+        }
+
+        button.message {
+            background-color: #9b59b6;
+        }
+
+        button.message:hover {
+            background-color: #8e44ad;
+        }
+
+        button.email {
+            background-color: #2ecc71;
+        }
+
+        button.email:hover {
+            background-color: #27ae60;
+        }
+
+        .message-box {
+            margin-top: 20px;
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 15px;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .attendance-table th,
+        .attendance-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .attendance-table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .attendance-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .attendance-table tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>R Programming Attendance Management</h1>
+
+        <div class="button-group">
+            <button id="startBtn">Start Attendance</button>
+            <button id="stopBtn" class="stop">Stop Attendance</button>
+            <button id="messageBtn" class="message">Send Message</button>
+            <button id="showAttendanceBtn">Show Attendance</button>
+            <button id="sendEmailBtn" class="email">Send Email Alerts</button>
+        </div>
+
+        <div id="messageBox" class="message-box">
+            <textarea id="messageText" placeholder="Enter your message for R Programming class..."></textarea>
+            <button id="sendMessageBtn">Broadcast Message</button>
+        </div>
+
+        <div id="statusMessage" class="status"></div>
+
+        <table id="attendanceTable" class="attendance-table">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Enrollment No.</th>
+                    <th>Name</th>
+                    <th>Classes Attended</th>
+                    <th>Total Classes</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceBody">
+                <!-- Attendance data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+document.getElementById('startBtn').addEventListener('click', async function() {
+    this.disabled = true;  // Disable button during request
+    const response = await fetch('/r_prog/start', { method: 'POST' });
+    const result = await response.json();
+    showStatus(result.message, response.ok);
+    this.disabled = false;  // Re-enable after completion
+});
+
+        document.getElementById('stopBtn').addEventListener('click', async () => {
+            const response = await fetch('/r_prog/stop', { method: 'POST' });
+            const result = await response.json();
+            showStatus(result.message, response.ok);
+        });
+
+        document.getElementById('messageBtn').addEventListener('click', () => {
+            document.getElementById('messageBox').style.display = 'block';
+        });
+
+        document.getElementById('sendMessageBtn').addEventListener('click', async () => {
+            const message = document.getElementById('messageText').value;
+            const response = await fetch('/r_prog/message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const result = await response.json();
+            showStatus(result.message, response.ok);
+        });
+
+        document.getElementById('showAttendanceBtn').addEventListener('click', async () => {
+            const response = await fetch('/r_prog/attendance');
+            const data = await response.json();
+
+            const tableBody = document.getElementById('attendanceBody');
+            tableBody.innerHTML = '';
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.s_no}</td>
+                    <td>${row.enrollment_no}</td>
+                    <td>${row.name}</td>
+                    <td>${row.r_prog_tca}</td>
+                    <td>${row.r_prog_tc}</td>
+                    <td>${row.r_prog_percentage}%</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            document.getElementById('attendanceTable').style.display = 'table';
+        });
+
+        document.getElementById('sendEmailBtn').addEventListener('click', async () => {
+            const response = await fetch('/r_prog/send_emails', { method: 'POST' });
+            const result = await response.json();
+            showStatus(result.message, response.ok);
+        });
+
+        function showStatus(message, isSuccess) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${isSuccess ? 'success' : 'error'}`;
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

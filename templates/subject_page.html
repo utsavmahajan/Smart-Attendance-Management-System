@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subject Actions</title>
+</head>
+<body>
+    <h2>Subject: {{ subject.upper() }}</h2>
+    <a href="{{ url_for('show_attendance', subject=subject) }}">
+        <button>Show Attendance</button>
+    </a>
+    <a href="{{ url_for('send_email', subject=subject) }}">
+        <button>Send Email</button>
+    </a>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Attendance Controller</title>
+</head>
+<body>
+    <h2>Smart Attendance System</h2>
+    <form method="post">
+        <label for="subject">Select Subject:</label>
+        <select name="subject" id="subject" required>
+            {% for key, value in subjects.items() %}
+                <option value="{{ key }}">{{ key.upper() }} ({{ value }})</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit" name="action" value="start">Start Attendance</button>
+        <button type="submit" name="action" value="stop">Stop Attendance</button>
+    </form>
+
+    <hr>
+
+    <h3>Announce Message to Class</h3>
+    <form method="post">
+        <label for="subject">Subject (for professor name):</label>
+        <select name="subject" id="subject" required>
+            {% for key, value in subjects.items() %}
+                <option value="{{ key }}">{{ key.upper() }} ({{ value }})</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="message">Enter Message:</label><br>
+        <textarea name="message" id="message" rows="4" cols="50" placeholder="Enter message to announce..."></textarea><br><br>
+        <button type="submit" name="action" value="announce">Announce</button>
+    </form>
+</body>
+</html>
+

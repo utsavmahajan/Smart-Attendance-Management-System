@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - 2202611</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .navbar {
+      background: linear-gradient(to left, #00008b, #512da8, #8b0000);
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .container {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .welcome-banner {
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .attendance-card {
+      border-left: 5px solid #512da8;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .subject {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .progress-container {
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .danger {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+
+    .warning {
+      color: #f39c12;
+      font-weight: 600;
+    }
+
+    .safe {
+      color: #2ecc71;
+      font-weight: 600;
+    }
+
+    .last-updated {
+      text-align: right;
+      font-size: 12px;
+      color: #777;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <h2><i class="fas fa-graduation-cap"></i> Medicaps ERP</h2>
+    </div>
+    <div class="profile">
+      <span>2202611 - Utsav Mahajan</span>
+      <img src="https://ui-avatars.com/api/?name=Utsav+Mahajan&background=random" alt="Profile">
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="welcome-banner">
+      <h2>Welcome, Utsav Mahajan!</h2>
+      <p>Scholar Number: 2202611 | B.Tech IT (2022-26)</p>
+    </div>
+
+    <h3 style="margin-bottom: 15px;"><i class="fas fa-calendar-check"></i> Attendance Summary</h3>
+
+    <!-- DCC Card -->
+    <div class="attendance-card">
+      <div class="subject">Distributed Cloud Computing (DCC)</div>
+      <div class="progress-container">
+        <div class="progress-bar" style="width: 82%;">82%</div>
+      </div>
+      <div class="stats">
+        <span>Attended: 23/28</span>
+        <span class="safe">Above Threshold</span>
+      </div>
+    </div>
+
+    <!-- SE Card -->
+    <div class="attendance-card">
+      <div class="subject">Software Engineering (SE)</div>
+      <div class="progress-container">
+        <div class="progress-bar" style="width: 71%;">71%</div>
+      </div>
+      <div class="stats">
+        <span>Attended: 20/28</span>
+        <span class="warning">Warning (Near Threshold)</span>
+      </div>
+    </div>
+
+    <!-- CD Card -->
+    <div class="attendance-card">
+      <div class="subject">Compiler Design (CD)</div>
+      <div class="progress-container">
+        <div class="progress-bar" style="width: 64%;">64%</div>
+      </div>
+      <div class="stats">
+        <span>Attended: 18/28</span>
+        <span class="danger">Below 75%</span>
+      </div>
+    </div>
+
+    <!-- Additional Subjects -->
+    <div class="attendance-card">
+      <div class="subject">Pattern Recognition (PR)</div>
+      <div class="progress-container">
+        <div class="progress-bar" style="width: 89%;">89%</div>
+      </div>
+      <div class="stats">
+        <span>Attended: 25/28</span>
+        <span class="safe">Excellent</span>
+      </div>
+    </div>
+
+    <div class="last-updated">
+      Last updated: <span id="update-time">Loading...</span>
+    </div>
+  </div>
+
+  <script>
+    // Dynamic last updated time
+    document.getElementById('update-time').textContent = new Date().toLocaleString();
+
+    // Sample data fetch (replace with actual API call)
+    async function fetchAttendance() {
+      // In real implementation, this would call your Flask API
+      // const response = await fetch('/student/2202611/attendance');
+      // return await response.json();
+    }
+  </script>
+</body>
+</html>

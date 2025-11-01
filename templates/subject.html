@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ subject.upper() }} Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef1f4;
+            padding: 50px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 30px;
+        }
+        button {
+            padding: 15px 25px;
+            margin: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ subject.upper() }} - Attendance Actions</h2>
+    <form action="/show_attendance/{{ subject }}" method="GET">
+        <button type="submit">Show Attendance</button>
+    </form>
+    <form action="/start_attendance/{{ subject }}" method="POST">
+        <button type="submit">Start Attendance</button>
+    </form>
+    <form action="/stop_attendance/{{ subject }}" method="POST">
+        <button type="submit">Stop Attendance</button>
+    </form>
+    <form action="/send_email/{{ subject }}" method="POST">
+        <button type="submit">Send Email</button>
+    </form>
+    <form action="/top_attendance/{{ subject }}" method="GET">
+        <button type="submit">Top Attendance</button>
+    </form>
+</body>
+</html>

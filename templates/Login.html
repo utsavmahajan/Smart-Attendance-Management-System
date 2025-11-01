@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .navbar {
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to left, #00008b, #512da8, #8b0000);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 50px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo img {
+      height: 30px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links li a {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links li a:hover {
+      color: #ffd700;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+      margin-top: 40px;
+      overflow: hidden;
+      width: 768px;
+      max-width: 90%;
+      min-height: 480px;
+      position: relative;
+    }
+
+    .container p {
+      font-size: 14px;
+      margin: 20px 0;
+    }
+
+    .container span {
+      font-size: 12px;
+    }
+
+    .container a {
+      color: #333;
+      font-size: 13px;
+      text-decoration: none;
+      margin: 15px 0 10px;
+    }
+
+    .container button {
+      background-color: #512da8;
+      color: #fff;
+      font-size: 12px;
+      padding: 10px 45px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .container button:hover {
+      background-color: #5c6bc0;
+    }
+
+    .container button.hidden {
+      background-color: transparent;
+      border: 1px solid #fff;
+    }
+
+    .container form {
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 40px;
+      height: 100%;
+    }
+
+    .container input {
+      background-color: #eee;
+      border: none;
+      margin: 8px 0;
+      padding: 10px 15px;
+      font-size: 13px;
+      border-radius: 8px;
+      width: 100%;
+      outline: none;
+    }
+
+    .form-container {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      transition: all 0.6s ease-in-out;
+    }
+
+    .sign-in {
+      left: 0;
+      z-index: 2;
+    }
+
+    .container.active .sign-in {
+      transform: translateX(100%);
+    }
+
+    .sign-up {
+      left: 0;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .container.active .sign-up {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 5;
+      animation: move 0.6s;
+    }
+
+    @keyframes move {
+      0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+      }
+      50%, 100% {
+        opacity: 1;
+        z-index: 5;
+      }
+    }
+
+    .social-icons {
+      margin: 20px 0;
+    }
+
+    .social-icons h2 {
+      font-size: 24px;
+      color: #512da8;
+    }
+
+    .toggle-container {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      transition: all 0.6s ease-in-out;
+      border-radius: 150px 0 0 100px;
+      z-index: 1000;
+    }
+
+    .container.active .toggle-container {
+      transform: translateX(-100%);
+      border-radius: 0 150px 100px 0;
+    }
+
+    .toggle {
+      background: linear-gradient(to right, #5c6bc0, #512da8);
+      color: #fff;
+      height: 100%;
+      width: 200%;
+      position: relative;
+      left: -100%;
+      transition: all 0.6s ease-in-out;
+    }
+
+    .container.active .toggle {
+      transform: translateX(50%);
+    }
+
+    .toggle-panel {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 30px;
+      text-align: center;
+      top: 0;
+      transition: all 0.6s ease-in-out;
+    }
+
+    .toggle-left {
+      transform: translateX(-200%);
+    }
+
+    .container.active .toggle-left {
+      transform: translateX(0);
+    }
+
+    .toggle-right {
+      right: 0;
+      transform: translateX(0);
+    }
+
+    .container.active .toggle-right {
+      transform: translateX(200%);
+    }
+    /* Flash message styling */
+.flash-messages {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+}
+
+.flash-error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 4px;
+  border-left: 4px solid #c62828;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  animation: slideIn 0.5s, fadeOut 0.5s 2.5s forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="College Logo">
+    </div>
+    <ul class="nav-links">
+      <li><a href="Login.html">Login</a></li>
+      <li><a href="Error404.html">About</a></li>
+        <li><a href="Error404.html">Academic</a></li>
+      <li><a href="Error404.html">Placement</a></li>
+    </ul>
+  </nav>
+
+  <div class="container" id="container">
+    <div class="form-container sign-up">
+      <form action="/login" method="post">
+        <h1>Sign In</h1>
+        <div class="social-icons">
+          <h2>Teacher ERP</h2>
+        </div>
+        <input type="text" name="Teacher_Id" placeholder="Teacher ID">
+        <input type="password" name="password" placeholder="Password">
+        <a href="Error404.html">Create Account</a>
+        <button>Sign In</button>
+      </form>
+    </div>
+
+    <div class="form-container sign-in">
+      <form action="/login" method="post">
+        <h1>Sign In</h1>
+        <div class="social-icons">
+          <h2>Student ERP</h2>
+        </div>
+        <input type="text" name="Student_Id" placeholder="Scholar Number">
+        <input type="password" name="password" placeholder="Password">
+        <a href="Error404.html">Create Account</a>
+        <button>Sign In</button>
+      </form>
+    </div>
+    <!-- Add this inside <body> -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>Hello, Teacher!</h1>
+          <p>Not a Teacher? Sign in as Student instead</p>
+          <button class="hidden" id="login" type="button">Sign In as Student</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Hello, Student!</h1>
+          <p>Not a Student? Sign in as Teacher instead</p>
+          <button class="hidden" id="register" type="button">Sign In as Teacher</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const registerBtn = document.getElementById('register');
+    const loginBtn = document.getElementById('login');
+
+    registerBtn.addEventListener('click', () => {
+      container.classList.add("active");
+    });
+
+    loginBtn.addEventListener('click', () => {
+      container.classList.remove("active");
+    });
+      registerBtn.addEventListener('click', () => {
+  container.classList.add("active");
+
+  // Set mode to teacher
+  fetch('/set_mode/teacher', {
+    method: 'POST'
+  });
+});
+
+loginBtn.addEventListener('click', () => {
+  container.classList.remove("active");
+
+  // Set mode to student
+  fetch('/set_mode/student', {
+    method: 'POST'
+  });
+});
+      // Auto-remove flash messages after 3 seconds
+  document.addEventListener('DOMContentLoaded', () => {
+    const flashes = document.querySelectorAll('.flash-error');
+    flashes.forEach(flash => {
+      setTimeout(() => {
+        flash.remove();
+      }, 3000);
+    });
+  });
+  </script>
+</body>
+</html>

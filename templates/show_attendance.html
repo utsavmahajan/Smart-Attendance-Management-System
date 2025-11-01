@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance for {{ subject.upper() }}</title>
+</head>
+<body>
+    <h2>Attendance Details - {{ subject.upper() }}</h2>
+    <table border="1">
+        <tr>
+            <th>S No</th>
+            <th>Enrollment No</th>
+            <th>Name</th>
+            <th>{{ subject.upper() }} TCA</th>
+            <th>{{ subject.upper() }} TC</th>
+            <th>{{ subject.upper() }} %</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row.s_no }}</td>
+            <td>{{ row.enrollment_no }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row[subject + '_tca'] }}</td>
+            <td>{{ row[subject + '_tc'] }}</td>
+            <td>{{ row[subject + '_percentage'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
